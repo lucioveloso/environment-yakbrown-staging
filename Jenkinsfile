@@ -3,31 +3,20 @@ pipeline {
     disableConcurrentBuilds()
   }
   agent {
-    label "jenkins-maven"
-  }
-  environment {
-    DEPLOY_NAMESPACE = "jx-staging"
-  }
-  stages {
-    stage('Validate Environment') {
-      steps {
-        container('maven') {
-          dir('env') {
-            sh 'jx step helm build'
-          }
-        }
+    kubernetes {
+      containerTemplate {
+        name 'test-a'
+        image 'maven:3.3.9-jdk-8-alpine'
+        ttyEnabled true
+        command 'cat'
       }
     }
-    stage('Update Environment') {
-      when {
-        branch 'master'
-      }
+  }
+  stages {
+    stage('Run maven') {
       steps {
-        container('maven') {
-          dir('env') {
-            sh 'jx step helm apply'
-          }
-        }
+        sh 'mvn -version'
+        sh "echo Workspace dir is ${pwd()}"
       }
     }
   }
