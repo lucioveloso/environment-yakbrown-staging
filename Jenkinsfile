@@ -17,8 +17,13 @@ pipeline {
     stage('Run test') {
       steps {
         container('test-a') {
-          sh 'helm ls'
-          sh "echo Workspace dir is ${pwd()}"
+          sh 'helm init --client-only'
+          sh 'helm repo update'
+          sh 'export TILLER_NAMESPACE=PIPELINE'
+          sh 'export TILLER_NAMESPACE=$NAMESPACE'
+          sh 'export HELM_HOST=127.0.0.1:44134'
+          sh 'helm tiller start-ci $NAMESPACE'
+          sh 'helm ls' 
         }
       }
     }
