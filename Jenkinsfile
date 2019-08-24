@@ -4,19 +4,22 @@ pipeline {
   }
   agent {
     kubernetes {
+      defaultContainer 'jnlp'
       containerTemplate {
         name 'test-a'
-        image 'maven:3.3.9-jdk-8-alpine'
+        image 'alpine/helm:2.14.0'
         ttyEnabled true
         command 'cat'
       }
     }
   }
   stages {
-    stage('Run maven') {
+    stage('Run test') {
       steps {
-        sh 'mvn -version'
-        sh "echo Workspace dir is ${pwd()}"
+        container('test-a') {
+          sh 'helm ls'
+          sh "echo Workspace dir is ${pwd()}"
+        }
       }
     }
   }
