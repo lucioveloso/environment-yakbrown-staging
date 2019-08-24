@@ -19,6 +19,7 @@ pipeline {
         container('test-a') {
           sh 'helm init --client-only'
           sh 'helm repo update'
+          sh 'helm plugin install https://github.com/rimusz/helm-tiller'
           sh 'export TILLER_NAMESPACE=PIPELINE'
           sh 'export TILLER_NAMESPACE=$NAMESPACE'
           sh 'export HELM_HOST=127.0.0.1:44134'
