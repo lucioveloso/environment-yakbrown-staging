@@ -18,8 +18,7 @@ pipeline {
       steps {
         container('test-a') {
           sh 'helm init --tiller-namespace pipeline'
-          sh 'helm repo update'
-          sh 'helm ls' 
+          sh 'helm ls --tiller-namespace pipeline' 
         }
       }
     }
