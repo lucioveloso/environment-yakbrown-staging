@@ -17,7 +17,7 @@ pipeline {
     stage('Run test') {
       steps {
         container('test-a') {
-          sh 'helm init --tiller-namespace pipeline'
+          sh 'helm init --wait --tiller-namespace pipeline'
           sh 'helm ls --tiller-namespace pipeline' 
         }
       }
